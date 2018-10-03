@@ -1,3 +1,24 @@
+"""
+This module defines an LXML extension library that wraps the ipaddress python module.
+
+Examples
+--------
+
+from lxml import etree
+import pylxmlextipaddress
+
+# given "config" is an LXML XML structure, you can run the XPath to find all IPv4 network items:
+
+config = etree.parse('tests/config.xml').getroot()
+
+ns = {'ip': pylxmlextipaddress.NAMESPACE}
+
+items = config.xpath('//*[ip:is-net-ip4(.)', namespaces=ns)
+
+print(items[0].text)
+>>> 10.10.0.0/16
+"""
+
 from lxml.etree import FunctionNamespace
 import ipaddress
 from functools import wraps
@@ -8,7 +29,6 @@ NAMESPACE = 'http://pylxmlipaddress.jeremyschulman.com'
 # the caller must use the NAMESPACE value when calling xpath with the namespace= argument
 
 _ns_ext = FunctionNamespace(NAMESPACE)
-
 
 
 # ----------------------------------------------------------------------------
@@ -43,7 +63,7 @@ def is_any_ip4(value):
 
 def is_net_ip4(value):
     """
-    Determine if this given value is an IPv4 network value, or an IPv4 interface value;
+    Determine if this given value is an IPv4 network value or an IPv4 interface value;
     as defined by the ipaddress module
 
     Parameters
@@ -70,8 +90,7 @@ def is_net_ip4(value):
 
 def is_host_ip4(value):
     """
-    Determine if this given value is an IPv4 network value, or an IPv4 interface value;
-    as defined by the ipaddress module
+    Determine if this given value is an IPv4 address value as defined by the ipaddress module.
 
     Parameters
     ----------
@@ -99,8 +118,8 @@ def is_host_ip4(value):
 
 def is_any_ip6(value):
     """
-    Determine if this given value is an IP address, an IP network value, or an IP interface value;
-    as defined by the ipaddress module
+    Determine if this given value is an IPv6 address, an IPv6 network value,
+    or an IPv6 interface value as defined by the ipaddress module
 
     Parameters
     ----------
@@ -125,8 +144,7 @@ def is_any_ip6(value):
 
 def is_host_ip6(value):
     """
-    Determine if this given value is an IP address, an IP network value, or an IP interface value;
-    as defined by the ipaddress module
+    Determine if this given value is an IPv6 address value as defined by the ipaddress module.
 
     Parameters
     ----------
@@ -148,7 +166,7 @@ def is_host_ip6(value):
 
 def is_net_ip6(value):
     """
-    Determine if this given value is an IP address, an IP network value, or an IP interface value;
+    Determine if this given value is an IPv6 network value or an IPv6 interface value
     as defined by the ipaddress module
 
     Parameters
@@ -178,14 +196,61 @@ def is_net_ip6(value):
 # -----------------------------------------------------------------------------------------------------------------
 
 def is_any_ip(value):
+    """
+    Determine if this given value is an IP address, an IP network value, or an IP interface value;
+    as defined by the ipaddress module; either IPv4 or IPv6.
+
+    Parameters
+    ----------
+    value : str
+        The value to check
+
+    Returns
+    -------
+    bool
+        True if the value is any valid IP thing
+        False otherwise
+    """
     return is_any_ip4(value) or is_any_ip6(value)
 
 
 def is_host_ip(value):
+    """
+    Determine if this given value is an IP address as defined by the ipaddress module;
+    either IPv4 or IPv6.
+
+    Parameters
+    ----------
+    value : str
+        The value to check
+
+    Returns
+    -------
+    bool
+        True if the value is any valid IP address
+        False otherwise
+    """
+
     return is_host_ip4(value) or is_host_ip6(value)
 
 
 def is_net_ip(value):
+    """
+    Determine if this given value is an IP network value, or an IP interface value;
+    as defined by the ipaddress module; either IPv4 or IPv6.
+
+    Parameters
+    ----------
+    value : str
+        The value to check
+
+    Returns
+    -------
+    bool
+        True if the value is any valid IP thing
+        False otherwise
+    """
+
     return is_net_ip4(value) or is_net_ip6(value)
 
 
@@ -217,6 +282,7 @@ def ip_only(value):
             pass
 
     return None
+
 
 def in_subnet(value, subnet):
     """
