@@ -20,7 +20,7 @@ ns = {'ip': pylxmlextipaddress.NAMESPACE}
 items = config.xpath('//*[ip:is-net-ip4(.)', namespaces=ns)
 
 print(items[0].text)
->>> 10.10.0.0/16
+# >>> 10.10.0.0/16
 """
 
 from lxml.etree import FunctionNamespace
