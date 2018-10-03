@@ -10,7 +10,7 @@ develop:
 
 clean:
 	python setup.py clean
-	rm -rf *.egg-info/
+	rm -rf *.egg-info/ build/ dist/
 	find . -name '*.pyc' -print | xargs rm
 
 
