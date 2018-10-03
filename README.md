@@ -18,9 +18,15 @@ ns = {'ip': pylxmlextipaddress.NAMESPACE}
 items = config.xpath('//*[ip:is-net-ip4(.)', namespaces=ns)
 
 print(items[0].text)
->>> 10.10.0.0/16
+# >>> 10.10.0.0/16
 
+# Find all items that are in either the 172.18/16 or 101.10.201/24 subnets
+
+items = config.xpath('//*[ip:in-subnet(., "172.18.0.0/16") or ip:in-subnet(., "10.10.201.0/24")]', namespaces=ns)
+print(items[0].text)
+# >>> 172.18.1.1
 ````
+
 
 # Install
 
