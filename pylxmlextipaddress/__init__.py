@@ -287,9 +287,12 @@ def ip_only(value):
 
     return None
 
+
 @lru_cache()
 def _to_subnet(subnet):
+    """ used to cache subnet conversions used by in_subnet """
     return ipaddress.ip_network(subnet)
+
 
 def in_subnet(value, subnet):
     """
