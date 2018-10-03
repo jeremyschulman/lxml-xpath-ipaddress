@@ -312,8 +312,11 @@ def in_subnet(value, subnet):
         True if the value is in the subnet
         False otherwise; which could be the case if the value is not an IP thing.
     """
-    return ipaddress.ip_address(ip_only(value)) in _to_subnet(subnet)
+    try:
+        return ipaddress.ip_address(ip_only(value)) in _to_subnet(subnet)
 
+    except:
+        return False
 
 # -----------------------------------------------------------------------------------------------------------------
 # These functions are bound into the LXML namespace.  See extension documentation for details
