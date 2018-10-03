@@ -21,6 +21,15 @@ print(items[0].text)
 >>> 10.10.0.0/16
 
 ````
+
+# Install
+
+```bash
+$ python setup.py install
+```
+
+Will be posted to PyPI soon ... 
+
 # LXML Extension Functions
 
 ## Either IPv4 or IPv6
