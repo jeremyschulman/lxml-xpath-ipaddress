@@ -25,7 +25,7 @@ print(items[0].text)
 
 from lxml.etree import FunctionNamespace
 import ipaddress
-from functools import wraps
+from functools import wraps, lru_cache
 
 NAMESPACE = 'http://pylxmlipaddress.jeremyschulman.com'
 
@@ -287,6 +287,9 @@ def ip_only(value):
 
     return None
 
+@lru_cache()
+def _to_subnet(subnet):
+    return ipaddress.ip_network(subnet)
 
 def in_subnet(value, subnet):
     """
@@ -306,7 +309,7 @@ def in_subnet(value, subnet):
         True if the value is in the subnet
         False otherwise; which could be the case if the value is not an IP thing.
     """
-    return ipaddress.ip_address(ip_only(value)) in ipaddress.ip_network(subnet)
+    return ipaddress.ip_address(ip_only(value)) in _to_subnet(subnet)
 
 
 # -----------------------------------------------------------------------------------------------------------------
