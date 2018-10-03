@@ -1,4 +1,8 @@
 """
+MIT License
+
+Copyright (c) 2018 Jeremy Schulman
+
 This module defines an LXML extension library that wraps the ipaddress python module.
 
 Examples
