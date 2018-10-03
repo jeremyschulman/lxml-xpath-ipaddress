@@ -26,6 +26,7 @@ print(items[0].text)
 from lxml.etree import FunctionNamespace
 import ipaddress
 from functools import wraps, lru_cache
+import re
 
 NAMESPACE = 'http://pylxmlipaddress.jeremyschulman.com'
 
@@ -317,6 +318,49 @@ def in_subnet(value, subnet):
 
     except:
         return False
+
+
+def expand_paths(items):
+    """
+    Given a list of Element items, this generator will yield string paths
+    to the element from the top of the tree.  The LXML tree.getelementpath() function
+    returns a path with index elements, for example:
+
+        'security/group-vpn/server/ike/gateway[1]/address'
+
+    This function expands the [<n>] to the text value of that item, for example:
+
+        'security/group-vpn/server/ike/gateway[group-gw1]/address[172.18.1.1]'
+
+    Parameters
+    ----------
+    items : list[Elemenet]
+        A list of LXML Elemenet objects
+
+    Yields
+    ------
+    str
+        The expanded path substituting the [<n>] to string values
+    """
+    m = re.compile('\[\d+\]')
+    tree = items[0].getroottree()
+
+    def func(mo):
+        find = mo.string[:mo.end()]
+        if find == mo.string:
+            found = tree.xpath(find)[0].text
+        else:
+            found = tree.xpath(find)[0][0].text
+        return f'[{found}]'
+
+    for item in items:
+        path = tree.getelementpath(item)
+        replace = m.sub(func, path)
+        if path.endswith(']'):
+            yield replace
+        else:
+            yield f'{replace}[{item.text}]'
+
 
 # -----------------------------------------------------------------------------------------------------------------
 # These functions are bound into the LXML namespace.  See extension documentation for details
