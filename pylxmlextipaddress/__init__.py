@@ -35,6 +35,13 @@ NAMESPACE = 'http://pylxmlipaddress.jeremyschulman.com'
 
 _ns_ext = FunctionNamespace(NAMESPACE)
 
+# define a dictionary namespace for 'easy use' for default purposes.  There is no
+# obligation to use this.  This dictionary would be used for example:
+#
+#    items = config.xpath('//*[ip:is-net-ip4(.)', namespaces=ns)
+
+ns = {'ip': NAMESPACE}
+
 
 # ----------------------------------------------------------------------------
 # IPv4 functions
