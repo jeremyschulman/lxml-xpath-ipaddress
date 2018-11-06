@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="us-ascii"?>
+<junoscript xmlns="http://xml.juniper.net/xnm/1.1/xnm" xmlns:junos="http://xml.juniper.net/junos/18.2R1/junos" schemaLocation="http://xml.juniper.net/junos/18.2R1/junos junos/18.2R1/junos.xsd" os="JUNOS" release="18.2R1-S1.5" hostname="vsrx5" version="1.0">
+<!-- session start at 2018-11-04 20:16:48 UTC -->
+<!-- No zombies were killed during the creation of this user interface -->
+<!-- user admin, class j-super-user -->
+<rpc-reply xmlns:junos="http://xml.juniper.net/junos/18.2R1/junos">
+<route-information xmlns="http://xml.juniper.net/junos/18.2R1/junos-routing">
+<!-- keepalive -->
+<route-table>
+<table-name>inet.0</table-name>
+<destination-count>3</destination-count>
+<total-route-count>3</total-route-count>
+<active-route-count>3</active-route-count>
+<holddown-route-count>0</holddown-route-count>
+<hidden-route-count>0</hidden-route-count>
+<rt junos:style="brief">
+<rt-destination>0.0.0.0/0</rt-destination>
+<rt-entry>
+<active-tag>*</active-tag>
+<current-active/>
+<last-active/>
+<protocol-name>Access-internal</protocol-name>
+<preference>12</preference>
+<age junos:seconds="53">00:00:53</age>
+<metric>0</metric>
+<nh>
+<selected-next-hop/>
+<to>192.168.229.1</to>
+<via>fxp0.0</via>
+</nh>
+</rt-entry>
+</rt>
+<rt junos:style="brief">
+<rt-destination>192.168.229.0/24</rt-destination>
+<rt-entry>
+<active-tag>*</active-tag>
+<current-active/>
+<last-active/>
+<protocol-name>Direct</protocol-name>
+<preference>0</preference>
+<age junos:seconds="54">00:00:54</age>
+<nh>
+<selected-next-hop/>
+<via>fxp0.0</via>
+</nh>
+</rt-entry>
+</rt>
+<rt junos:style="brief">
+<rt-destination>192.168.229.20/32</rt-destination>
+<rt-entry>
+<active-tag>*</active-tag>
+<current-active/>
+<last-active/>
+<protocol-name>Local</protocol-name>
+<preference>0</preference>
+<age junos:seconds="54">00:00:54</age>
+<nh-type>Local</nh-type>
+<nh>
+<nh-local-interface>fxp0.0</nh-local-interface>
+</nh>
+</rt-entry>
+</rt>
+</route-table>
+<route-table>
+<table-name>inet6.0</table-name>
+<destination-count>1</destination-count>
+<total-route-count>1</total-route-count>
+<active-route-count>1</active-route-count>
+<holddown-route-count>0</holddown-route-count>
+<hidden-route-count>0</hidden-route-count>
+<rt junos:style="brief">
+<rt-destination>ff02::2/128</rt-destination>
+<rt-entry>
+<active-tag>*</active-tag>
+<current-active/>
+<last-active/>
+<protocol-name>INET6</protocol-name>
+<preference>0</preference>
+<age junos:seconds="307">00:05:07</age>
+<nh-type>MultiRecv</nh-type>
+</rt-entry>
+</rt>
+</route-table>
+</route-information>
+</rpc-reply>
+<!-- session end at 2018-11-04 20:16:48 UTC -->
+</junoscript>
