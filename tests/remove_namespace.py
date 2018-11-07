@@ -3,10 +3,12 @@ from lxml import etree
 from lxml.etree import XMLParser
 import re
 
+strip_ns_expr = 'xmlns=\"[^"]+\"|xmlns:\w+=\"[^"]+\"'
+
 
 class ParseBytesStripNS(XMLParser):
     """ if parsing byte content """
-    strip_ns = re.compile(b'xmlns=\"[^"]+\"|xmlns:\w+=\"[^"]+\"')
+    strip_ns = re.compile(strip_ns_expr.encode('u8'))
 
     def feed(self, data):
         newdata = ParseBytesStripNS.strip_ns.sub(b'', data)
@@ -15,7 +17,7 @@ class ParseBytesStripNS(XMLParser):
 
 class ParseStripNS(XMLParser):
     """ if parsing str content """
-    strip_ns = re.compile('xmlns=\"[^"]+\"|xmlns:\w+=\"[^"]+\"')
+    strip_ns = re.compile(strip_ns_expr)
 
     def feed(self, data):
         newdata = ParseStripNS.strip_ns.sub('', data)
@@ -46,7 +48,7 @@ def from_file(filename):
     return parser.close()
 
 
-def from_file_chunked(filename, mode, size):
+def from_file_chunked(filename, mode='r', size=2048):
 
     parser = ParseBytesStripNS if 'b' in mode else ParseStripNS
     reader = parser(target=BuildTreeNoNS())
