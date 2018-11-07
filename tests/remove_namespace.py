@@ -43,12 +43,23 @@ class RemoveNamespaces(XMLFilterBase):
 from lxml import etree
 from lxml.etree import XMLParser
 import re
-strip_ns = re.compile(b'xmlns=\"[^"]+\"|xmlns:\w+=\"[^"]+\"')
+
+
+class ParseBytesStripNS(XMLParser):
+    """ if parsing byte content """
+    strip_ns = re.compile(b'xmlns=\"[^"]+\"|xmlns:\w+=\"[^"]+\"')
+
+    def feed(self, data):
+        newdata = ParseBytesStripNS.strip_ns.sub(b'', data)
+        super(ParseBytesStripNS, self).feed(newdata)
 
 
 class ParseStripNS(XMLParser):
+    """ if parsing str content """
+    strip_ns = re.compile('xmlns=\"[^"]+\"|xmlns:\w+=\"[^"]+\"')
+
     def feed(self, data):
-        newdata = strip_ns.sub(b'', data)
+        newdata = ParseStripNS.strip_ns.sub('', data)
         super(ParseStripNS, self).feed(newdata)
 
 
