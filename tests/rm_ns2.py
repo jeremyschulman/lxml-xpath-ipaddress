@@ -67,7 +67,6 @@ class BuildTreeNoNS(etree.TreeBuilder):
         -------
         The value from TreeBuilder.start() providing the attributes without namespaces.
         """
-
         # iterate through the attributes and use only the non-namespace attribute
         # name.  The rpartition use handles the case when the attribute does not
         # have a namespace as well.
@@ -77,7 +76,7 @@ class BuildTreeNoNS(etree.TreeBuilder):
             for orig_name, attr_value in attrib.items()
         }
 
-        return super(BuildTreeNoNS, self).start(tag, no_ns_attrib, nsmap)
+        return super(BuildTreeNoNS, self).start(tag, no_ns_attrib, {})
 
     def data(self, data):
         """

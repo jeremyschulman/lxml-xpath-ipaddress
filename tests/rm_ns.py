@@ -16,8 +16,8 @@ class RemoveNamespaces(XMLFilterBase):
 
     This class can then be used as a base-class for more advanced XML SAX processing.
     """
-    def __init__(self, parent=None):
-        super(RemoveNamespaces, self).__init__(parent=parent)
+    def __init__(self, *vargs, **kwargs):
+        super(RemoveNamespaces, self).__init__(*vargs, **kwargs)
         self._etree_handler = ElementTreeContentHandler()
 
     @property
@@ -108,3 +108,4 @@ def from_file(filename, mode='r', size=4096):
 
     reader.close()
     return handler.etree
+

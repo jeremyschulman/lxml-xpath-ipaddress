@@ -1,12 +1,11 @@
 from lxml import etree
 
 
-def ppxml(xml):
+def pretty_print(xml):
     print(etree.tostring(xml, encoding='unicode', pretty_print=True))
 
 
 def indent(elem, level=0):
-
     spaces = f'\n{level * "  "}'
 
     if len(elem):
