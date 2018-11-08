@@ -5,7 +5,17 @@ from xml.sax import make_parser
 
 
 class RemoveNamespaces(XMLFilterBase):
+    """
+    This class implements the xml.sax.ContentHandler methods so that it can
+    be used with XMLReader parser.  The function of this class is to build
+    an LXML ElementTree using the lxml.sax.ElementTreeContentHandler.  THe
+    methods in this class are used to intercept the SAX events so that:
 
+        1) namespace values are removed - default namespaces and attribute namespaces
+        2) CRLF are stripped from the element text
+
+    This class can then be used as a base-class for more advanced XML SAX processing.
+    """
     def __init__(self, parent=None):
         super(RemoveNamespaces, self).__init__(parent=parent)
         self._etree_handler = ElementTreeContentHandler()
@@ -15,6 +25,22 @@ class RemoveNamespaces(XMLFilterBase):
         return self._etree_handler.etree
 
     def startElement(self, name, attrs):
+        """
+        This method is used to intercept the start element SAX events and remove
+        the namespace values out of the attrs.  The namespace definitions are also
+        located in the attrs, so we want to both discard these as well as remove the namespace
+        prefix from the attributes we want to keep.  Once updated, this
+        method then invokes the LXML ElementTree content handler start element so that
+        the tree can be built.
+
+        Parameters
+        ----------
+        name : str
+            The element tag name.
+
+        attrs : xml.sax.xmlreader.AttributesImpl
+            The collections of element attributes
+        """
         keep_attrs = {
             orig_name.rpartition(':')[-1]: attr_value
             for orig_name, attr_value in attrs.items()
@@ -24,9 +50,22 @@ class RemoveNamespaces(XMLFilterBase):
         self._etree_handler.startElement(name, keep_attrs)
 
     def endElement(self, name):
+        """
+        This method is used to intercept the SAX "end element" event and invoke the
+        ElementTree handler.
+
+        Parameters
+        ----------
+        name : str
+            The element tag name
+        """
         self._etree_handler.endElement(name)
 
     def characters(self, content):
+        """
+        This method is used to intercept the SAX "characters" event and invoke
+        the Element tree handler with the content stripped for CRLR
+        """
         self._etree_handler.characters(content.strip())
 
 
