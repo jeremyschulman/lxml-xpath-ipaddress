@@ -3,12 +3,17 @@ from lxml import etree
 from lxml.etree import XMLParser
 import re
 
+# the following regular expression is used to find the XML namespace assignment values
+# in elements. the form can be either the default namespace (xmlns) or a namespace
+# assignment, for example xmlns:junos="...".
 
 XML_ELEMENT_NS_REGEXP = 'xmlns=\"[^"]+\"|xmlns:\w+=\"[^"]+\"'
 
 
 class ParseBytesStripNS(XMLParser):
-    """ if parsing byte content """
+    """
+    XMLParser subclass used to remove XML namespaces when the content provided is bytes.
+    """
     strip_ns = re.compile(XML_ELEMENT_NS_REGEXP.encode('u8'))
 
     def feed(self, data):
@@ -17,7 +22,9 @@ class ParseBytesStripNS(XMLParser):
 
 
 class ParseStripNS(XMLParser):
-    """ if parsing str content """
+    """
+    XMLParser subclass used to remove XML namespaces when the content provided is str.
+    """
     strip_ns = re.compile(XML_ELEMENT_NS_REGEXP)
 
     def feed(self, data):
@@ -90,6 +97,29 @@ class BuildTreeNoNS(etree.TreeBuilder):
 
 
 def from_file(filename, mode='r', size=2048):
+    """
+    This funciton will read XML from `filename` and return an LXML ElementTree.  The
+    contents of `filename` are read in chunks of `size` and feed into an LXML SAX processor
+    so that the namespaces are removed, and data is stripped of CRLF; using the parser classes
+    and parser targets provided by this module.
+
+    Parameters
+    ----------
+    filename : str
+        Path to XML file
+
+    mode : str
+        The mode to open the file.  This is 'r' by default, but if you are reading in a byte file
+        then you should use 'rb'
+
+    size : int
+        The size of the chunks to read from the file.
+
+    Returns
+    -------
+    ElementTree:
+        The resulting LXML ElementTree object resulting from the SAX processing.
+    """
 
     parser = ParseBytesStripNS if 'b' in mode else ParseStripNS
     reader = parser(target=BuildTreeNoNS())
